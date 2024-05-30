@@ -1,13 +1,17 @@
 using Inscripciones.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuracion = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+string cadenaConexion = configuracion.GetConnectionString("mysqlremote");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<InscripcionesContext>(option =>
-    option.UseSqlServer(configuracion.GetConnectionString("sqlserver")));
+//builder.Services.AddDbContext<InscripcionesContext>(option =>
+//option.UseSqlServer(configuracion.GetConnectionString("sqlserver")));
+builder.Services.AddDbContext<InscripcionesContext>(options => options.UseMySql(
+      cadenaConexion, ServerVersion.AutoDetect(cadenaConexion)));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

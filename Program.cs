@@ -4,14 +4,15 @@ using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuracion = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-string cadenaConexion = configuracion.GetConnectionString("mysqlremote");
+string cadenaConexion = configuracion.GetConnectionString("mysqlremoto");
+builder.Services.AddDbContext<InscripcionesContext>(options => options.UseMySql(cadenaConexion,
+            ServerVersion.AutoDetect(cadenaConexion),
+                                options => options.EnableRetryOnFailure(
+                                        maxRetryCount: 5,
+                                        maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                                       errorNumbersToAdd: null)
+            ));
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-//builder.Services.AddDbContext<InscripcionesContext>(option =>
-//option.UseSqlServer(configuracion.GetConnectionString("sqlserver")));
-builder.Services.AddDbContext<InscripcionesContext>(options => options.UseMySql(
-      cadenaConexion, ServerVersion.AutoDetect(cadenaConexion)));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

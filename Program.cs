@@ -4,6 +4,7 @@ using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuracion = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+builder.Services.AddControllersWithViews();
 string cadenaConexion = configuracion.GetConnectionString("mysqlremoto");
 builder.Services.AddDbContext<InscripcionesContext>(options => options.UseMySql(cadenaConexion,
             ServerVersion.AutoDetect(cadenaConexion),

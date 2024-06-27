@@ -20,38 +20,38 @@ namespace Inscripciones.Controllers
             _context = context;
         }
 
-        // GET: api/DetalleInscripciones1
+        // GET: api/ApiDetalleInscripciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetalleInscripciones>>> GetDetalleInscripciones()
+        public async Task<ActionResult<IEnumerable<DetalleInscripcion>>> Getdetallesinscripciones()
         {
             return await _context.DetalleInscripciones.ToListAsync();
         }
 
-        // GET: api/DetalleInscripciones1/5
+        // GET: api/ApiDetalleInscripciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DetalleInscripciones>> GetDetalleInscripciones(int id)
+        public async Task<ActionResult<DetalleInscripcion>> GetDetalleInscripcion(int id)
         {
-            var detalleInscripciones = await _context.DetalleInscripciones.FindAsync(id);
+            var detalleInscripcion = await _context.DetalleInscripciones.FindAsync(id);
 
-            if (detalleInscripciones == null)
+            if (detalleInscripcion == null)
             {
                 return NotFound();
             }
 
-            return detalleInscripciones;
+            return detalleInscripcion;
         }
 
-        // PUT: api/DetalleInscripciones1/5
+        // PUT: api/ApiDetalleInscripciones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDetalleInscripciones(int id, DetalleInscripciones detalleInscripciones)
+        public async Task<IActionResult> PutDetalleInscripcion(int id, DetalleInscripcion detalleInscripcion)
         {
-            if (id != detalleInscripciones.Id)
+            if (id != detalleInscripcion.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(detalleInscripciones).State = EntityState.Modified;
+            _context.Entry(detalleInscripcion).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Inscripciones.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DetalleInscripcionesExists(id))
+                if (!DetalleInscripcionExists(id))
                 {
                     return NotFound();
                 }
@@ -72,34 +72,34 @@ namespace Inscripciones.Controllers
             return NoContent();
         }
 
-        // POST: api/DetalleInscripciones1
+        // POST: api/ApiDetalleInscripciones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DetalleInscripciones>> PostDetalleInscripciones(DetalleInscripciones detalleInscripciones)
+        public async Task<ActionResult<DetalleInscripcion>> PostDetalleInscripcion(DetalleInscripcion detalleInscripcion)
         {
-            _context.DetalleInscripciones.Add(detalleInscripciones);
+            _context.DetalleInscripciones.Add(detalleInscripcion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDetalleInscripciones", new { id = detalleInscripciones.Id }, detalleInscripciones);
+            return CreatedAtAction("GetDetalleInscripcion", new { id = detalleInscripcion.Id }, detalleInscripcion);
         }
 
-        // DELETE: api/DetalleInscripciones1/5
+        // DELETE: api/ApiDetalleInscripciones/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetalleInscripciones(int id)
+        public async Task<IActionResult> DeleteDetalleInscripcion(int id)
         {
-            var detalleInscripciones = await _context.DetalleInscripciones.FindAsync(id);
-            if (detalleInscripciones == null)
+            var detalleInscripcion = await _context.DetalleInscripciones.FindAsync(id);
+            if (detalleInscripcion == null)
             {
                 return NotFound();
             }
 
-            _context.DetalleInscripciones.Remove(detalleInscripciones);
+            _context.DetalleInscripciones.Remove(detalleInscripcion);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool DetalleInscripcionesExists(int id)
+        private bool DetalleInscripcionExists(int id)
         {
             return _context.DetalleInscripciones.Any(e => e.Id == id);
         }

@@ -1,4 +1,4 @@
-﻿@model Inscripciones.Models.DetalleInscripciones
+﻿@model Inscripciones.Models.DetalleInscripcion
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>DetalleInscripciones</h4>
+<h4>DetalleInscripcion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,17 +14,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ModalidadCursado" class="control-label"></label>
-                <input asp-for="ModalidadCursado" class="form-control" />
+                <select asp-for="ModalidadCursado" asp-items="Html.GetEnumSelectList<ModalidadCursadoEnum>()" class="form-control"></select>
                 <span asp-validation-for="ModalidadCursado" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="InscripcionId" class="control-label"></label>
-                <select asp-for="InscripcionId" class ="form-control" asp-items="ViewBag.InscripcionId"></select>
+                <select asp-for="InscripcionId" class="form-control" asp-items="ViewBag.Inscripciones"></select>
             </div>
             <div class="form-group">
-                <label asp-for="MateriasId" class="control-label"></label>
-                <input asp-for="MateriasId" class="form-control" />
-                <span asp-validation-for="MateriasId" class="text-danger"></span>
+                <label asp-for="MateriaId" class="control-label"></label>
+                <select asp-for="MateriaId" class ="form-control" asp-items="ViewBag.MateriaId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

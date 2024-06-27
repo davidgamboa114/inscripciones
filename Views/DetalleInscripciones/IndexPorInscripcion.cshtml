@@ -2,13 +2,22 @@
 
 @{
     ViewData["Title"] = "Index";
+    int idinscripcion = ViewBag.IdInscripcion;
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateConInscripcion" asp-route-idinscripcion="@idinscripcion">Create New</a>
 </p>
+
+<form asp-controller="DetalleInscripciones" asp-action="IndexPorInscripcion">
+    <div class="form-group">
+        <label asp-for="@idinscripcion" class="control-label"></label>
+        <select asp-for="@idinscripcion" class="form-control" asp-items="ViewBag.Inscripciones" disabled onchange="this.form.submit()"></select>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.ModalidadCursado)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Inscripcion)
+                @Html.DisplayNameFor(model => model.Materia.AnioCarrera)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Materia)
@@ -31,10 +40,10 @@
                 @Html.DisplayFor(modelItem => item.ModalidadCursado)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Inscripcion.Id)
+                @Html.DisplayFor(modelItem => item.Materia.AnioCarrera.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Materia.Id)
+                @Html.DisplayFor(modelItem => item.Materia.Nombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

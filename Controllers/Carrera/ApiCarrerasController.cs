@@ -11,47 +11,47 @@ namespace Inscripciones.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiInscripcionesController : ControllerBase
+    public class ApiCarrerasController : ControllerBase
     {
         private readonly InscripcionesContext _context;
 
-        public ApiInscripcionesController(InscripcionesContext context)
+        public ApiCarrerasController(InscripcionesContext context)
         {
             _context = context;
         }
 
-        // GET: api/ApiInscripciones
+        // GET: api/ApiCarreras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Inscripcion>>> GetInscripciones()
+        public async Task<ActionResult<IEnumerable<Carrera>>> Getcarreras()
         {
-            return await _context.Inscripciones.ToListAsync();
+            return await _context.carreras.ToListAsync();
         }
 
-        // GET: api/ApiInscripciones/5
+        // GET: api/ApiCarreras/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Inscripcion>> GetInscripcion(int id)
+        public async Task<ActionResult<Carrera>> GetCarrera(int id)
         {
-            var inscripcion = await _context.Inscripciones.FindAsync(id);
+            var carrera = await _context.carreras.FindAsync(id);
 
-            if (inscripcion == null)
+            if (carrera == null)
             {
                 return NotFound();
             }
 
-            return inscripcion;
+            return carrera;
         }
 
-        // PUT: api/ApiInscripciones/5
+        // PUT: api/ApiCarreras/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInscripcion(int id, Inscripcion inscripcion)
+        public async Task<IActionResult> PutCarrera(int id, Carrera carrera)
         {
-            if (id != inscripcion.Id)
+            if (id != carrera.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(inscripcion).State = EntityState.Modified;
+            _context.Entry(carrera).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Inscripciones.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InscripcionExists(id))
+                if (!CarreraExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace Inscripciones.Controllers
             return NoContent();
         }
 
-        // POST: api/ApiInscripciones
+        // POST: api/ApiCarreras
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Inscripcion>> PostInscripcion(Inscripcion inscripcion)
+        public async Task<ActionResult<Carrera>> PostCarrera(Carrera carrera)
         {
-            _context.Inscripciones.Add(inscripcion);
+            _context.carreras.Add(carrera);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInscripcion", new { id = inscripcion.Id }, inscripcion);
+            return CreatedAtAction("GetCarrera", new { id = carrera.Id }, carrera);
         }
 
-        // DELETE: api/ApiInscripciones/5
+        // DELETE: api/ApiCarreras/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInscripcion(int id)
+        public async Task<IActionResult> DeleteCarrera(int id)
         {
-            var inscripcion = await _context.Inscripciones.FindAsync(id);
-            if (inscripcion == null)
+            var carrera = await _context.carreras.FindAsync(id);
+            if (carrera == null)
             {
                 return NotFound();
             }
 
-            _context.Inscripciones.Remove(inscripcion);
+            _context.carreras.Remove(carrera);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool InscripcionExists(int id)
+        private bool CarreraExists(int id)
         {
-            return _context.Inscripciones.Any(e => e.Id == id);
+            return _context.carreras.Any(e => e.Id == id);
         }
     }
 }

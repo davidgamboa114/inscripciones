@@ -11,47 +11,47 @@ namespace Inscripciones.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiCarrerasController : ControllerBase
+    public class ApiAnioCarrerasController : ControllerBase
     {
         private readonly InscripcionesContext _context;
 
-        public ApiCarrerasController(InscripcionesContext context)
+        public ApiAnioCarrerasController(InscripcionesContext context)
         {
             _context = context;
         }
 
-        // GET: api/ApiCarreras
+        // GET: api/ApiAnioCarreras
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Carrera>>> GetCarreras()
+        public async Task<ActionResult<IEnumerable<AnioCarrera>>> GetAnioCarreras()
         {
-            return await _context.Carreras.ToListAsync();
+            return await _context.AnioCarreras.ToListAsync();
         }
 
-        // GET: api/ApiCarreras/5
+        // GET: api/ApiAnioCarreras/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Carrera>> GetCarrera(int id)
+        public async Task<ActionResult<AnioCarrera>> GetAnioCarrera(int id)
         {
-            var carrera = await _context.Carreras.FindAsync(id);
+            var anioCarrera = await _context.AnioCarreras.FindAsync(id);
 
-            if (carrera == null)
+            if (anioCarrera == null)
             {
                 return NotFound();
             }
 
-            return carrera;
+            return anioCarrera;
         }
 
-        // PUT: api/ApiCarreras/5
+        // PUT: api/ApiAnioCarreras/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarrera(int id, Carrera carrera)
+        public async Task<IActionResult> PutAnioCarrera(int id, AnioCarrera anioCarrera)
         {
-            if (id != carrera.Id)
+            if (id != anioCarrera.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(carrera).State = EntityState.Modified;
+            _context.Entry(anioCarrera).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Inscripciones.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarreraExists(id))
+                if (!AnioCarreraExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace Inscripciones.Controllers
             return NoContent();
         }
 
-        // POST: api/ApiCarreras
+        // POST: api/ApiAnioCarreras
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Carrera>> PostCarrera(Carrera carrera)
+        public async Task<ActionResult<AnioCarrera>> PostAnioCarrera(AnioCarrera anioCarrera)
         {
-            _context.Carreras.Add(carrera);
+            _context.AnioCarreras.Add(anioCarrera);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCarrera", new { id = carrera.Id }, carrera);
+            return CreatedAtAction("GetAnioCarrera", new { id = anioCarrera.Id }, anioCarrera);
         }
 
-        // DELETE: api/ApiCarreras/5
+        // DELETE: api/ApiAnioCarreras/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarrera(int id)
+        public async Task<IActionResult> DeleteAnioCarrera(int id)
         {
-            var carrera = await _context.Carreras.FindAsync(id);
-            if (carrera == null)
+            var anioCarrera = await _context.AnioCarreras.FindAsync(id);
+            if (anioCarrera == null)
             {
                 return NotFound();
             }
 
-            _context.Carreras.Remove(carrera);
+            _context.AnioCarreras.Remove(anioCarrera);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CarreraExists(int id)
+        private bool AnioCarreraExists(int id)
         {
-            return _context.Carreras.Any(e => e.Id == id);
+            return _context.AnioCarreras.Any(e => e.Id == id);
         }
     }
 }

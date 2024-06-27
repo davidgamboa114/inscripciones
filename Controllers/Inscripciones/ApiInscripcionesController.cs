@@ -11,47 +11,47 @@ namespace Inscripciones.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiAnioCarrerasController : ControllerBase
+    public class ApiInscripcionesController : ControllerBase
     {
         private readonly InscripcionesContext _context;
 
-        public ApiAnioCarrerasController(InscripcionesContext context)
+        public ApiInscripcionesController(InscripcionesContext context)
         {
             _context = context;
         }
 
-        // GET: api/ApiAnioCarreras
+        // GET: api/ApiInscripciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AnioCarrera>>> GetAnioCarreras()
+        public async Task<ActionResult<IEnumerable<Inscripcion>>> Getinscripciones()
         {
-            return await _context.AnioCarrera.ToListAsync();
+            return await _context.inscripciones.ToListAsync();
         }
 
-        // GET: api/ApiAnioCarreras/5
+        // GET: api/ApiInscripciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AnioCarrera>> GetAnioCarreras(int id)
+        public async Task<ActionResult<Inscripcion>> GetInscripcion(int id)
         {
-            var anioCarreras = await _context.AnioCarrera.FindAsync(id);
+            var inscripcion = await _context.inscripciones.FindAsync(id);
 
-            if (anioCarreras == null)
+            if (inscripcion == null)
             {
                 return NotFound();
             }
 
-            return anioCarreras;
+            return inscripcion;
         }
 
-        // PUT: api/ApiAnioCarreras/5
+        // PUT: api/ApiInscripciones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAnioCarreras(int id, AnioCarrera anioCarreras)
+        public async Task<IActionResult> PutInscripcion(int id, Inscripcion inscripcion)
         {
-            if (id != anioCarreras.Id)
+            if (id != inscripcion.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(anioCarreras).State = EntityState.Modified;
+            _context.Entry(inscripcion).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Inscripciones.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AnioCarrerasExists(id))
+                if (!InscripcionExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace Inscripciones.Controllers
             return NoContent();
         }
 
-        // POST: api/ApiAnioCarreras
+        // POST: api/ApiInscripciones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AnioCarrera>> PostAnioCarreras(AnioCarrera anioCarreras)
+        public async Task<ActionResult<Inscripcion>> PostInscripcion(Inscripcion inscripcion)
         {
-            _context.AnioCarrera.Add(anioCarreras);
+            _context.inscripciones.Add(inscripcion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAnioCarreras", new { id = anioCarreras.Id }, anioCarreras);
+            return CreatedAtAction("GetInscripcion", new { id = inscripcion.Id }, inscripcion);
         }
 
-        // DELETE: api/ApiAnioCarreras/5
+        // DELETE: api/ApiInscripciones/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnioCarreras(int id)
+        public async Task<IActionResult> DeleteInscripcion(int id)
         {
-            var anioCarreras = await _context.AnioCarrera.FindAsync(id);
-            if (anioCarreras == null)
+            var inscripcion = await _context.inscripciones.FindAsync(id);
+            if (inscripcion == null)
             {
                 return NotFound();
             }
 
-            _context.AnioCarrera.Remove(anioCarreras);
+            _context.inscripciones.Remove(inscripcion);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool AnioCarrerasExists(int id)
+        private bool InscripcionExists(int id)
         {
-            return _context.AnioCarrera.Any(e => e.Id == id);
+            return _context.inscripciones.Any(e => e.Id == id);
         }
     }
 }

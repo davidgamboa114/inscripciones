@@ -9,23 +9,24 @@ using Inscripciones.Models;
 
 namespace Inscripciones.Controllers
 {
-    public class DetalleInscripcionesController : Controller
+    public class InscripcionesController : Controller
     {
         private readonly InscripcionesContext _context;
 
-        public DetalleInscripcionesController(InscripcionesContext context)
+        public InscripcionesController(InscripcionesContext context)
         {
             _context = context;
         }
 
-        // GET: DetalleInscripciones
+        // GET: Inscripciones
         public async Task<IActionResult> Index()
         {
-            var inscripcionesContext = _context.DetalleInscripciones.Include(d => d.Inscripcion);
-            return View(await inscripcionesContext.ToListAsync());
+
+            var inscripciones = _context.inscripciones.Include(i => i.Alumno).Include(i => i.Carrera);
+            return View(await inscripciones.ToListAsync());
         }
 
-        // GET: DetalleInscripciones/Details/5
+        // GET: Inscripciones/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +34,45 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var detalleInscripciones = await _context.DetalleInscripciones
-                .Include(d => d.Inscripcion)
+            var inscripcion = await _context.inscripciones
+                .Include(i => i.Alumno)
+                .Include(i => i.Carrera)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (detalleInscripciones == null)
+            if (inscripcion == null)
             {
                 return NotFound();
             }
 
-            return View(detalleInscripciones);
+            return View(inscripcion);
         }
 
-        // GET: DetalleInscripciones/Create
+        // GET: Inscripciones/Create
         public IActionResult Create()
         {
-            ViewData["InscripcionId"] = new SelectList(_context.Inscripciones, "Id", "Id");
+            ViewData["Alumnos"] = new SelectList(_context.alumnos, "Id", "ApellidoNombre");
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Nombre");
             return View();
         }
 
-        // POST: DetalleInscripciones/Create
+        // POST: Inscripciones/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ModalidadCursado,InscripcionId,MateriasId")] DetalleInscripciones detalleInscripciones)
+        public async Task<IActionResult> Create([Bind("Id,Fecha,AlumnoId,CarreraId")] Inscripcion inscripcion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(detalleInscripciones);
+                _context.Add(inscripcion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InscripcionId"] = new SelectList(_context.Inscripciones, "Id", "Id", detalleInscripciones.InscripcionId);
-            return View(detalleInscripciones);
+            ViewData["AlumnoId"] = new SelectList(_context.alumnos, "Id", "ApellidoNombre", inscripcion.AlumnoId);
+            ViewData["CarreraId"] = new SelectList(_context.carreras, "Id", "Nombre", inscripcion.CarreraId);
+            return View(inscripcion);
         }
 
-        // GET: DetalleInscripciones/Edit/5
+        // GET: Inscripciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +80,24 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var detalleInscripciones = await _context.DetalleInscripciones.FindAsync(id);
-            if (detalleInscripciones == null)
+            var inscripcion = await _context.inscripciones.FindAsync(id);
+            if (inscripcion == null)
             {
                 return NotFound();
             }
-            ViewData["InscripcionId"] = new SelectList(_context.Inscripciones, "Id", "Id", detalleInscripciones.InscripcionId);
-            return View(detalleInscripciones);
+            ViewData["AlumnoId"] = new SelectList(_context.alumnos, "Id", "ApellidoNombre", inscripcion.AlumnoId);
+            ViewData["CarreraId"] = new SelectList(_context.carreras, "Id", "Nombre", inscripcion.CarreraId);
+            return View(inscripcion);
         }
 
-        // POST: DetalleInscripciones/Edit/5
+        // POST: Inscripciones/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ModalidadCursado,InscripcionId,MateriasId")] DetalleInscripciones detalleInscripciones)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,AlumnoId,CarreraId")] Inscripcion inscripcion)
         {
-            if (id != detalleInscripciones.Id)
+            if (id != inscripcion.Id)
             {
                 return NotFound();
             }
@@ -101,12 +106,12 @@ namespace Inscripciones.Controllers
             {
                 try
                 {
-                    _context.Update(detalleInscripciones);
+                    _context.Update(inscripcion);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DetalleInscripcionesExists(detalleInscripciones.Id))
+                    if (!InscripcionExists(inscripcion.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +122,12 @@ namespace Inscripciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InscripcionId"] = new SelectList(_context.Inscripciones, "Id", "Id", detalleInscripciones.InscripcionId);
-            return View(detalleInscripciones);
+            ViewData["AlumnoId"] = new SelectList(_context.alumnos, "Id", "ApellidoNombre", inscripcion.AlumnoId);
+            ViewData["CarreraId"] = new SelectList(_context.carreras, "Id", "Nombre", inscripcion.CarreraId);
+            return View(inscripcion);
         }
 
-        // GET: DetalleInscripciones/Delete/5
+        // GET: Inscripciones/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,35 +135,36 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var detalleInscripciones = await _context.DetalleInscripciones
-                .Include(d => d.Inscripcion)
+            var inscripcion = await _context.inscripciones
+                .Include(i => i.Alumno)
+                .Include(i => i.Carrera)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (detalleInscripciones == null)
+            if (inscripcion == null)
             {
                 return NotFound();
             }
 
-            return View(detalleInscripciones);
+            return View(inscripcion);
         }
 
-        // POST: DetalleInscripciones/Delete/5
+        // POST: Inscripciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var detalleInscripciones = await _context.DetalleInscripciones.FindAsync(id);
-            if (detalleInscripciones != null)
+            var inscripcion = await _context.inscripciones.FindAsync(id);
+            if (inscripcion != null)
             {
-                _context.DetalleInscripciones.Remove(detalleInscripciones);
+                _context.inscripciones.Remove(inscripcion);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DetalleInscripcionesExists(int id)
+        private bool InscripcionExists(int id)
         {
-            return _context.DetalleInscripciones.Any(e => e.Id == id);
+            return _context.inscripciones.Any(e => e.Id == id);
         }
     }
 }

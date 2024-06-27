@@ -23,11 +23,7 @@ namespace Inscripciones.Controllers
             return View();
         }
 
-        public IActionResult Aniversario()
-        {
-            return View();
-        }
-        public IActionResult Ajedrez()
+        public IActionResult Aniversario35()
         {
             return View();
         }

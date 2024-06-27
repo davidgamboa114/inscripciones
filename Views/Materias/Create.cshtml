@@ -19,8 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="AnioCarreraId" class="control-label"></label>
-                <input asp-for="AnioCarreraId" class="form-control" />
-                <span asp-validation-for="AnioCarreraId" class="text-danger"></span>
+                <select asp-for="AnioCarreraId" class="form-control" asp-items="ViewBag.AniosCarreras"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -21,10 +21,18 @@ namespace Inscripciones.Controllers
         // GET: AnioCarreras
         public async Task<IActionResult> Index()
         {
-            var inscripcionesContext = _context.AnioCarrera.Include(a => a.Carrera);
+            var inscripcionesContext = _context.AnioCarreras.Include(a => a.Carrera);
             return View(await inscripcionesContext.ToListAsync());
         }
 
+        public async Task<IActionResult> IndexPorCarrera(int? idcarrera = 1)
+        {
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Nombre", idcarrera);
+            var inscripcionesContext = _context.AnioCarreras.Include(a => a.Carrera).Where(a => a.CarreraId.Equals(idcarrera));
+            ViewData["IdCarrera"] = idcarrera;
+
+            return View(await inscripcionesContext.ToListAsync());
+        }
         // GET: AnioCarreras/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,21 +41,28 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var anioCarreras = await _context.AnioCarrera
+            var anioCarrera = await _context.AnioCarreras
                 .Include(a => a.Carrera)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (anioCarreras == null)
+            if (anioCarrera == null)
             {
                 return NotFound();
             }
 
-            return View(anioCarreras);
+            return View(anioCarrera);
         }
 
         // GET: AnioCarreras/Create
         public IActionResult Create()
         {
-            ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Id");
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Nombre");
+            return View();
+        }
+
+        public IActionResult CreateConCarrera(int? idcarrera)
+        {
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Nombre", idcarrera);
+            ViewData["IdCarrera"] = idcarrera;
             return View();
         }
 
@@ -56,16 +71,30 @@ namespace Inscripciones.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,CarreraId")] AnioCarrera anioCarreras)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,CarreraId")] AnioCarrera anioCarrera)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(anioCarreras);
+                _context.Add(anioCarrera);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Id", anioCarreras.CarreraId);
-            return View(anioCarreras);
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Id", anioCarrera.CarreraId);
+            return View(anioCarrera);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateConCarrera([Bind("Id,Nombre,CarreraId")] AnioCarrera anioCarrera)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(anioCarrera);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(IndexPorCarrera), new { idcarrera = anioCarrera.CarreraId });
+            }
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Id", anioCarrera.CarreraId);
+            return View(anioCarrera);
         }
 
         // GET: AnioCarreras/Edit/5
@@ -76,13 +105,13 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var anioCarreras = await _context.AnioCarrera.FindAsync(id);
-            if (anioCarreras == null)
+            var anioCarrera = await _context.AnioCarreras.FindAsync(id);
+            if (anioCarrera == null)
             {
                 return NotFound();
             }
-            ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Id", anioCarreras.CarreraId);
-            return View(anioCarreras);
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Id", anioCarrera.CarreraId);
+            return View(anioCarrera);
         }
 
         // POST: AnioCarreras/Edit/5
@@ -90,9 +119,9 @@ namespace Inscripciones.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,CarreraId")] AnioCarrera anioCarreras)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,CarreraId")] AnioCarrera anioCarrera)
         {
-            if (id != anioCarreras.Id)
+            if (id != anioCarrera.Id)
             {
                 return NotFound();
             }
@@ -101,12 +130,12 @@ namespace Inscripciones.Controllers
             {
                 try
                 {
-                    _context.Update(anioCarreras);
+                    _context.Update(anioCarrera);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AnioCarrerasExists(anioCarreras.Id))
+                    if (!AnioCarreraExists(anioCarrera.Id))
                     {
                         return NotFound();
                     }
@@ -117,8 +146,8 @@ namespace Inscripciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Id", anioCarreras.CarreraId);
-            return View(anioCarreras);
+            ViewData["Carreras"] = new SelectList(_context.carreras, "Id", "Id", anioCarrera.CarreraId);
+            return View(anioCarrera);
         }
 
         // GET: AnioCarreras/Delete/5
@@ -129,15 +158,15 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var anioCarreras = await _context.AnioCarrera
+            var anioCarrera = await _context.AnioCarreras
                 .Include(a => a.Carrera)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (anioCarreras == null)
+            if (anioCarrera == null)
             {
                 return NotFound();
             }
 
-            return View(anioCarreras);
+            return View(anioCarrera);
         }
 
         // POST: AnioCarreras/Delete/5
@@ -145,19 +174,19 @@ namespace Inscripciones.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var anioCarreras = await _context.AnioCarrera.FindAsync(id);
-            if (anioCarreras != null)
+            var anioCarrera = await _context.AnioCarreras.FindAsync(id);
+            if (anioCarrera != null)
             {
-                _context.AnioCarrera.Remove(anioCarreras);
+                _context.AnioCarreras.Remove(anioCarrera);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AnioCarrerasExists(int id)
+        private bool AnioCarreraExists(int id)
         {
-            return _context.AnioCarrera.Any(e => e.Id == id);
+            return _context.AnioCarreras.Any(e => e.Id == id);
         }
     }
 }

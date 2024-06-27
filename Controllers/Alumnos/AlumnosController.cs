@@ -15,13 +15,14 @@ namespace Inscripciones.Controllers
 
         public AlumnosController(InscripcionesContext context)
         {
+
             _context = context;
         }
 
         // GET: Alumnos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Alumnos.ToListAsync());
+            return View(await _context.alumnos.ToListAsync());
         }
 
         // GET: Alumnos/Details/5
@@ -32,7 +33,7 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos
+            var alumno = await _context.alumnos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (alumno == null)
             {
@@ -72,7 +73,7 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _context.alumnos.FindAsync(id);
             if (alumno == null)
             {
                 return NotFound();
@@ -123,7 +124,7 @@ namespace Inscripciones.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos
+            var alumno = await _context.alumnos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (alumno == null)
             {
@@ -138,10 +139,10 @@ namespace Inscripciones.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _context.alumnos.FindAsync(id);
             if (alumno != null)
             {
-                _context.Alumnos.Remove(alumno);
+                _context.alumnos.Remove(alumno);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +151,7 @@ namespace Inscripciones.Controllers
 
         private bool AlumnoExists(int id)
         {
-            return _context.Alumnos.Any(e => e.Id == id);
+            return _context.alumnos.Any(e => e.Id == id);
         }
     }
 }
